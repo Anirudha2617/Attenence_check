@@ -23,7 +23,11 @@ class ClassSessionViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'patch', 'head', 'options'] # Only allow status updates
 
     def get_queryset(self):
-        return ClassSession.objects.filter(subject__user=self.request.user)
+        queryset = ClassSession.objects.filter(subject__user=self.request.user)
+        subject_id = self.request.query_params.get('subject', None)
+        if subject_id is not None:
+            queryset = queryset.filter(subject_id=subject_id)
+        return queryset
 
 class GenerateSessionsView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]

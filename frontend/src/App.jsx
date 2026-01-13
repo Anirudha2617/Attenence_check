@@ -4,10 +4,8 @@ import Register from './pages/Register';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from './pages/Dashboard';
-// import Subjects from './pages/Subjects';
-// import Timetable from './pages/Timetable';
-
 import Subjects from './pages/Subjects';
+import SubjectDetail from './pages/SubjectDetail';
 import Timetable from './pages/Timetable';
 
 function App() {
@@ -19,6 +17,7 @@ function App() {
       <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route index element={<Dashboard />} />
         <Route path="subjects" element={<Subjects />} />
+        <Route path="subjects/:id" element={<SubjectDetail />} />
         <Route path="timetable" element={<Timetable />} />
       </Route>
     </Routes>

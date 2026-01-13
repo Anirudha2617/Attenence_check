@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import api from '../services/api';
+import { useNavigate } from 'react-router-dom';
 import { Plus, Book, MoreVertical, Trash2, Calendar, Clock, CheckCircle } from 'lucide-react';
 
 export default function Subjects() {
     const [subjects, setSubjects] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [newSubject, setNewSubject] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchSubjects();
@@ -35,7 +37,11 @@ export default function Subjects() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {subjects.map(sub => (
-                    <div key={sub.id} className="glass-card p-6 flex flex-col justify-between min-h-[220px] group hover:border-blue-500/30 transition-all relative overflow-hidden">
+                    <div
+                        key={sub.id}
+                        onClick={() => navigate(`/subjects/${sub.id}`)}
+                        className="glass-card p-6 flex flex-col justify-between min-h-[220px] group hover:border-blue-500/30 transition-all relative overflow-hidden cursor-pointer"
+                    >
                         {/* Background Decoration */}
                         <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
                             <Book size={120} />
