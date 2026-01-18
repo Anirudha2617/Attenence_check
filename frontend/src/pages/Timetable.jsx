@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import api from '../services/api';
-import { Calendar, Clock, Plus, Trash2, RefreshCw, ChevronRight } from 'lucide-react';
+import { getTimetables, getSubjects, createTimetableEntry, deleteTimetableEntry, generateSessions } from '../services/api';
+import { Clock, Plus, Trash2, RefreshCw } from 'lucide-react';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -27,8 +27,8 @@ export default function Timetable() {
 
     const fetchData = async () => {
         const [ttRes, subRes] = await Promise.all([
-            api.get('timetables/'),
-            api.get('subjects/')
+            getTimetables(),
+            getSubjects()
         ]);
         setTimetable(ttRes.data);
         setSubjects(subRes.data);
@@ -39,7 +39,7 @@ export default function Timetable() {
         setLoading(true);
         try {
             const payload = { ...entry, end_date: entry.end_date || null };
-            await api.post('timetables/', payload);
+            await createTimetableEntry(payload);
             setShowModal(false);
             fetchData();
             // Reset crucial fields
@@ -55,7 +55,7 @@ export default function Timetable() {
     const handleDelete = async (id) => {
         if (!confirm("Are you sure? This will stop future auto-generations.")) return;
         try {
-            await api.delete(`timetables/${id}/`);
+            await deleteTimetableEntry(id);
             fetchData();
         } catch (err) {
             console.error(err);
@@ -65,7 +65,7 @@ export default function Timetable() {
     const handleGenerateNow = async () => {
         setLoading(true);
         try {
-            const res = await api.post('generate/');
+            const res = await generateSessions();
             alert(res.data.message);
         } catch (err) {
             console.error(err);

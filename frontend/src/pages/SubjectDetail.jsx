@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import { getSubject, getSessions, updateSessionStatus } from '../services/api';
 import { ArrowLeft, Calendar, Check, X, Ban, Loader2, Clock } from 'lucide-react';
 
 export default function SubjectDetail() {
@@ -18,8 +18,8 @@ export default function SubjectDetail() {
     const fetchData = async () => {
         try {
             const [subRes, sessRes] = await Promise.all([
-                api.get(`subjects/${id}/`),
-                api.get(`sessions/?subject=${id}`)
+                getSubject(id),
+                getSessions({ subject: id })
             ]);
             setSubject(subRes.data);
             // Sort sessions: Future to Past
@@ -35,7 +35,7 @@ export default function SubjectDetail() {
     const handleStatusUpdate = async (sessionId, status) => {
         setUpdatingId(sessionId);
         try {
-            await api.patch(`sessions/${sessionId}/`, { status });
+            await updateSessionStatus(sessionId, status);
             // Refresh stats locally or fetch again. Fetching again ensures percentage correctness.
             fetchData();
         } catch (err) {

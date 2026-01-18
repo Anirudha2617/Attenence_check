@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import api from '../services/api';
+import { register } from '../services/api';
 import { useNavigate, Link } from 'react-router-dom';
 import { User, Lock, Mail, ArrowRight, Loader2 } from 'lucide-react';
 
@@ -14,7 +14,7 @@ export default function Register() {
         setLoading(true);
         setError(null);
         try {
-            await api.post('register/', formData);
+            await register(formData);
             navigate('/login');
         } catch (err) {
             console.error(err);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import api from '../services/api';
+import { getSubjects, createSubject } from '../services/api';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Book, MoreVertical, Trash2, Calendar, Clock, CheckCircle } from 'lucide-react';
+import { Plus, Book, Calendar, CheckCircle } from 'lucide-react';
 
 export default function Subjects() {
     const [subjects, setSubjects] = useState([]);
@@ -13,11 +13,11 @@ export default function Subjects() {
         fetchSubjects();
     }, []);
 
-    const fetchSubjects = () => api.get('subjects/').then(res => setSubjects(res.data));
+    const fetchSubjects = () => getSubjects().then(res => setSubjects(res.data));
 
     const handleCreate = async (e) => {
         e.preventDefault();
-        await api.post('subjects/', { name: newSubject });
+        await createSubject({ name: newSubject });
         setNewSubject('');
         setShowModal(false);
         fetchSubjects();
@@ -88,7 +88,7 @@ export default function Subjects() {
                             <div className="w-full bg-gray-700/50 h-2.5 rounded-full overflow-hidden backdrop-blur-sm">
                                 <div
                                     className={`h-full rounded-full transition-all duration-1000 ${sub.attendance_percentage >= 75 ? 'bg-green-500' :
-                                            sub.attendance_percentage >= 50 ? 'bg-yellow-500' : 'bg-red-500'
+                                        sub.attendance_percentage >= 50 ? 'bg-yellow-500' : 'bg-red-500'
                                         }`}
                                     style={{ width: `${sub.attendance_percentage}%` }}
                                 />

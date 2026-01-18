@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import api from '../services/api';
+import { login } from '../services/api';
 import { useNavigate, Link } from 'react-router-dom';
 import { User, Lock, ArrowRight, Loader2 } from 'lucide-react';
 
@@ -15,7 +15,7 @@ export default function Login() {
         setLoading(true);
         setError(null);
         try {
-            const res = await api.post('token/', { username, password });
+            const res = await login(username, password);
             localStorage.setItem('access', res.data.access);
             localStorage.setItem('refresh', res.data.refresh);
             navigate('/');

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import api from '../services/api';
+import { getCurrentUser, getDashboardStats, updateSessionStatus } from '../services/api';
 import { Calendar, CheckCircle, XCircle, RefreshCw, Check, X, Ban, Loader2, TrendingUp, BarChart2 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, AreaChart, Area, CartesianGrid } from 'recharts';
 
@@ -14,14 +14,14 @@ export default function Dashboard() {
 
     useEffect(() => {
         // Fetch User and Stats
-        api.get('me/').then(res => setUser(res.data));
+        getCurrentUser().then(res => setUser(res.data));
         fetchDashboardData();
     }, []);
 
     const fetchDashboardData = async () => {
         setRefreshing(true);
         try {
-            const res = await api.get('dashboard-stats/');
+            const res = await getDashboardStats();
             setStats(res.data.stats);
             setTodaySessions(res.data.todaySessions);
             setSubjectStats(res.data.subjectStats);
@@ -36,7 +36,7 @@ export default function Dashboard() {
     const handleStatusUpdate = async (id, status) => {
         setUpdatingId(id);
         try {
-            await api.patch(`sessions/${id}/`, { status });
+            await updateSessionStatus(id, status);
             fetchDashboardData(); // Refresh stats immediately
         } catch (err) {
             console.error("Failed to update status", err);
