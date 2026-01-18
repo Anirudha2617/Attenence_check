@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { login } from '../services/api';
 import { useNavigate, Link } from 'react-router-dom';
-import { User, Lock, ArrowRight, Loader2 } from 'lucide-react';
+import { User, Lock, ArrowRight, Loader2, Eye, EyeOff } from 'lucide-react';
 
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -63,13 +64,20 @@ export default function Login() {
                         <div className="relative group">
                             <Lock className="absolute left-4 top-3.5 w-5 h-5 text-white/40 group-focus-within:text-blue-400 transition-colors" />
                             <input
-                                type="password"
-                                className="glass-input w-full pl-12"
+                                type={showPassword ? "text" : "password"}
+                                className="glass-input w-full pl-12 pr-12"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="••••••••"
                                 required
                             />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-4 top-3.5 text-white/40 hover:text-white transition-colors"
+                            >
+                                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                            </button>
                         </div>
                     </div>
 
@@ -85,7 +93,7 @@ export default function Login() {
                 <div className="mt-6 text-center text-sm text-white/40">
                     Don't have an account? <Link to="/register" className="text-blue-400 hover:text-blue-300 hover:underline">Register</Link>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }

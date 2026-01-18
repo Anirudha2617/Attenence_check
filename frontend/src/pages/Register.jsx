@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { register } from '../services/api';
 import { useNavigate, Link } from 'react-router-dom';
-import { User, Lock, Mail, ArrowRight, Loader2 } from 'lucide-react';
+import { User, Lock, Mail, ArrowRight, Loader2, Eye, EyeOff } from 'lucide-react';
 
 export default function Register() {
     const [formData, setFormData] = useState({ username: '', email: '', password: '' });
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -74,13 +75,20 @@ export default function Register() {
                         <div className="relative group">
                             <Lock className="absolute left-4 top-3.5 w-5 h-5 text-white/40 group-focus-within:text-pink-400 transition-colors" />
                             <input
-                                type="password"
-                                className="glass-input w-full pl-12"
+                                type={showPassword ? "text" : "password"}
+                                className="glass-input w-full pl-12 pr-12"
                                 value={formData.password}
                                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                 placeholder="••••••••"
                                 required
                             />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-4 top-3.5 text-white/40 hover:text-white transition-colors"
+                            >
+                                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                            </button>
                         </div>
                     </div>
 
@@ -96,7 +104,7 @@ export default function Register() {
                 <div className="mt-6 text-center text-sm text-white/40">
                     Already have an account? <Link to="/login" className="text-pink-400 hover:text-pink-300 hover:underline">Sign In</Link>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }
